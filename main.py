@@ -28,7 +28,7 @@ def get_char_count(str):
     return char_count_dict
 
 
-def print_formatted_analysis(path_to_text, word_count, char_count_dict):
+def filter_char_dict(char_dict):
     alphabet = {
         "a",
         "b",
@@ -58,16 +58,24 @@ def print_formatted_analysis(path_to_text, word_count, char_count_dict):
         "z",
     }
 
+    # filter out non-letter chars
+    letter_count = [
+        (char, count) for (char, count) in char_dict.items() if char in alphabet
+    ]
+
+    return letter_count
+
+
+def print_formatted_analysis(path_to_text, word_count, char_count_dict):
     print(f"--- Begin report of {path_to_text} ---")
 
     print(f"{word_count} words found in the document\n")
 
-    # filter out non-letter chars
-    letter_count = [
-        (char, count) for (char, count) in char_count_dict.items() if char in alphabet
-    ]
+    filtered_letter_count = filter_char_dict(char_count_dict)
 
-    sorted_letter_count = sorted(letter_count, key=lambda n: n[1], reverse=True)
+    sorted_letter_count = sorted(
+        filtered_letter_count, key=lambda n: n[1], reverse=True
+    )
 
     for tup in sorted_letter_count:
         char = tup[0]
